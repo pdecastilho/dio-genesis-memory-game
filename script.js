@@ -1,5 +1,5 @@
-const order = [];
-const clickedOrder = [];
+let order = [];
+let clickedOrder = [];
 let score = 0;
 
 // 0 - green
@@ -13,8 +13,8 @@ const yellow = document.querySelector(".yellow");
 const blue = document.querySelector(".blue");
 
 // cria ordem aleatória de cores
-const shuffleOrder = () => {
-  const colorOrder = Math.floor(Math.random() * 4);
+let shuffleOrder = () => {
+  let colorOrder = Math.floor(Math.random() * 4);
   order[order.length] = colorOrder;
   clickedOrder = [];
 
@@ -39,7 +39,7 @@ let lightColor = (element, number) => {
 let checkOrder = () => {
   for (let i in clickedOrder) {
     if (clickedOrder[i] != order[i]) {
-      lose();
+      gameOver();
       break;
     }
   }
@@ -55,7 +55,49 @@ let click = (color) => {
   createColorElement(color).classList.add("selected");
   setTimeout(() => {
     createColorElement(color).classList.remove("selected");
-  });
-
-  checkOrder();
+    checkOrder();
+  }, 250);
 };
+
+// retorna a cor
+let createColorElement = (color) => {
+  if (color == 0) {
+    return green;
+  } else if (color == 1) {
+    return red;
+  } else if (color == 2) {
+    return yellow;
+  } else if (color == 3) {
+    return blue;
+  }
+};
+
+// avançar de nível
+let nextLevel = () => {
+  score++;
+  shuffleOrder();
+};
+
+// game over
+let gameOver = () => {
+  alert(`Pontuação: ${score}\nVocê perdeu o jogo!`);
+  order = [];
+  clickedOrder = [];
+
+  playGame();
+};
+
+let playGame = () => {
+  alert("Bem vindo ao Genesis!\nIniciando novo jogo...");
+  score = 0;
+
+  nextLevel();
+};
+
+// eventos de clique para as cores
+green.onclick = () => click(0);
+red.onclick = () => click(1);
+yellow.onclick = () => click(2);
+blue.onclick = () => click(3);
+
+playGame();
